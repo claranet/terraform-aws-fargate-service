@@ -4,3 +4,6 @@ all:
 	black *.py test/*.py
 	flake8 --ignore E501 *.py test/*.py
 	terraform fmt -recursive
+
+test: all
+	pytest -v test

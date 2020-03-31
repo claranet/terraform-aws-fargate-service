@@ -2,6 +2,10 @@ variable "container_port" {
   default = 80
 }
 
+variable "secret_id" {
+  default = "terraform-aws-fargate-service-test"
+}
+
 provider "aws" {
   region = "eu-west-1"
 }
@@ -100,33 +104,12 @@ locals {
   attached_target_group_arn = aws_alb_listener.this.default_action[0].target_group_arn
 }
 
-# Create a secret.
-# This would normally be created manually to keep the values
-# out of the Terraform state file, but this is just a test.
-
-resource "aws_secretsmanager_secret" "this" {
-  name = random_id.name.hex
-}
-
-resource "aws_secretsmanager_secret_version" "this" {
-  secret_id = aws_secretsmanager_secret.this.id
-  secret_string = jsonencode({
-    APP_VALUE_1     = "one"
-    APP_VALUE_2     = "two"
-    APP_VALUE_3     = "three"
-    AUTOSCALING_MIN = 1
-    AUTOSCALING_MAX = 2
-  })
-}
-
 # Use the module to create a Fargate service and associated resources.
 
 module "fargate_service" {
   source = "../"
 
   name = random_id.name.hex
-
-  create_ecr_repository = true
 
   create_ecs_cluster = true
 
@@ -137,7 +120,7 @@ module "fargate_service" {
   create_ecs_task_role = true
 
   container_port = var.container_port
-  secret_id      = aws_secretsmanager_secret_version.this.secret_id
+  secret_id      = var.secret_id
 
   target_group_arn = local.attached_target_group_arn
 
@@ -147,6 +130,14 @@ module "fargate_service" {
 }
 
 # Outputs for testing.
+
+output "cfn_stack_name" {
+  value = module.fargate_service.cfn_stack_name
+}
+
+output "lambda_function_name" {
+  value = module.fargate_service.lambda_function_name
+}
 
 output "url" {
   value = "http://${aws_alb.this.dns_name}/"

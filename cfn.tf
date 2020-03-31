@@ -23,7 +23,6 @@ resource "aws_cloudformation_stack" "this" {
     log_group_name       = aws_cloudwatch_log_group.this.name
     name                 = var.name
     params_function_code = file("${path.module}/cfn-params.py")
-    repository_url       = local.ecr_repository_url
     secret_arn           = data.aws_secretsmanager_secret_version.this.arn
     security_group_ids   = local.ecs_security_group_ids
     subnet_ids           = var.subnet_ids

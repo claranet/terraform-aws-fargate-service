@@ -6,7 +6,6 @@ This module is not ready yet.
 
 ## Todo
 
-* Finish writing tests that build and deploy an image
 * Use GitHub Actions to run tests
 * Consider option to create in the module:
    * ALB

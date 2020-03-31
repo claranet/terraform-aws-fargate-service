@@ -79,12 +79,8 @@ variable "default_image" {
 # ECR repository.
 
 variable "create_ecr_repository" {
-  type = bool
-}
-
-variable "ecr_repository_arn" {
-  type    = string
-  default = null
+  type    = bool
+  default = false
 }
 
 # ECS cluster.
