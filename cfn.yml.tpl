@@ -109,8 +109,8 @@ Resources:
             awslogs-stream-prefix: !GetAtt Params.LOG_STREAM_PREFIX
         Name: "${name}"
         PortMappings:
-          - ContainerPort: ${container_port}
-            HostPort: ${container_port}
+          - ContainerPort: !GetAtt Params.CONTAINER_PORT
+            HostPort: !GetAtt Params.CONTAINER_PORT
             Protocol: tcp
         Secrets:
         - Name: SECRETS_JSON
@@ -125,7 +125,7 @@ Resources:
 %{ if target_group_arn != null ~}
       LoadBalancers:
         - ContainerName: "${name}"
-          ContainerPort: ${container_port}
+          ContainerPort: !GetAtt Params.CONTAINER_PORT
           TargetGroupArn: "${target_group_arn}"
 %{ endif ~}
       NetworkConfiguration:

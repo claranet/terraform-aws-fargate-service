@@ -3,10 +3,6 @@ variable "assign_public_ip" {
   default = false
 }
 
-variable "container_port" {
-  type = number
-}
-
 variable "name" {
   type = string
 }
@@ -59,6 +55,11 @@ variable "default_autoscaling_max" {
 variable "default_autoscaling_target_cpu" {
   type    = number
   default = 50
+}
+
+variable "default_container_port" {
+  type    = number
+  default = 80
 }
 
 variable "default_cpu" {

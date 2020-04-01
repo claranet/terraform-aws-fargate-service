@@ -1,7 +1,3 @@
-variable "container_port" {
-  default = 80
-}
-
 variable "secret_id" {
   default = "terraform-aws-fargate-service-test"
 }
@@ -79,7 +75,7 @@ resource "aws_alb" "this" {
 
 resource "aws_alb_target_group" "this" {
   name                 = random_id.name.hex
-  port                 = var.container_port
+  port                 = 80
   protocol             = "HTTP"
   target_type          = "ip"
   vpc_id               = module.vpc.vpc_id
@@ -119,8 +115,7 @@ module "fargate_service" {
 
   create_ecs_task_role = true
 
-  container_port = var.container_port
-  secret_id      = var.secret_id
+  secret_id = var.secret_id
 
   target_group_arn = local.attached_target_group_arn
 
